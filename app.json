@@ -25,9 +25,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [],
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    }
+    "plugins": []
   }
 }
