@@ -13,9 +13,11 @@ export enum Colors {
   INPUT_BACKGROUND = "#FFFFFF",
   WHITE = "#ffffff",
   TEXT = "#212529",
-  PRIMARY = "#E14032",
+  PRIMARY = "#1FCC79",
   SUCCESS = "#28a745",
   ERROR = "#dc3545",
+  TEXT_GRAY = "#9FA5C0",
+  LIGHTER_BORDER = "#E0E0E0"
 }
 
 export enum NavigationColors {

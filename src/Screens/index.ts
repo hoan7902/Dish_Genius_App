@@ -1,4 +1,5 @@
 export enum RootScreens {
-  MAIN = "Main",
+  HOME = "Home",
   WELCOME = "Welcome",
+  PROFILE = "Profile"
 }

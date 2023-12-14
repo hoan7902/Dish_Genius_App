@@ -12,3 +12,12 @@ web-build/
 
 # macOS
 .DS_Store
+
+ios
+
+yarn.lock
+
+mrtro.config.js
+
+package-lock.json
+
