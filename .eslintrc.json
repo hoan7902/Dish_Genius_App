@@ -6,7 +6,8 @@
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended" 
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -15,22 +16,18 @@
     },
     "plugins": [
         "@typescript-eslint",
-        "react"
+        "react",
+        "react-hooks"
     ],
     "rules": {
       "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
       "react-hooks/exhaustive-deps": "warn",
-      "react-native/no-unused-styles": 2,
-      "camelcase": "off",
       "react/no-array-index-key": 0,
-      "react-native/split-platform-components": 2,
       "react-native/no-inline-styles": 0,
       "flowtype-errors/show-errors": 0,
       "no-console": 0,
       "react/no-deprecated": 0,
       "react/no-unknown-property": 2,
-      "react/react-in-jsx-scope": 2,
-      "react/prop-types": 0,
       "react/sort-comp": 0,
       "react/display-name": 0,
       "react/no-string-refs": 2,
@@ -42,21 +39,39 @@
         "error",
         "never"
       ],
-      "max-len": [
-        "error",
-        {
-          "code": 170
-        }
-      ],
       "linebreak-style": 0,
       "arrow-body-style": "warn",
-      "import/no-extraneous-dependencies": [
+      "no-duplicate-case": 2,
+      "no-redeclare": 2,
+      "react/jsx-indent": [2, 2, {
+        "checkAttributes": false,
+        "indentLogicalExpressions": true
+      }],
+      "react/prop-types": 0,
+      "import/no-extraneous-dependencies": 0,
+      "react/jsx-filename-extension": 0,
+      "semi": 1,
+      "import/prefer-default-export": 0,
+      "jsx-a11y": 0,
+      "react/jsx-uses-vars": [2],
+      "react/jsx-no-bind": 0,
+      "camelcase": [1, { "properties": "never" }],
+      "react/destructuring-assignment": 0,
+      "no-underscore-dangle": 0,
+      "max-len": 0,
+      "no-param-reassign": 0,
+      "click-events-have-key-events": 0,
+      "react/react-in-jsx-scope": 0,
+      "react/jsx-uses-react": 0,
+      "indent": [
         "error",
+        2,
         {
-          "devDependencies": true
+          "SwitchCase": 1,
+          "VariableDeclarator": { "var": 2, "let": 2, "const": 3 },
+          "ignoredNodes": ["JSXElement *", "JSXElement"]
         }
       ],
-      "no-duplicate-case": 2,
-      "no-redeclare": 2
+      "@typescript-eslint/no-explicit-any": "off"
     }
 }

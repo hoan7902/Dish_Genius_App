@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import { Text } from 'native-base';
@@ -49,7 +49,7 @@ const BottomBarItem: React.FC<BottomBarItemProps> = ({ iconName, isActive, onPre
 
 const BottomBar: React.FC<BottomBarProps> = ({ navigation, activeIcon = 'Home' }) => {
   const handleIconClick = (iconName: string) => {
-    navigation.navigate(iconName)
+    navigation.navigate(iconName);
   };
 
   return (

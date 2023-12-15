@@ -11,8 +11,7 @@ const Stack = createNativeStackNavigator();
 
 type MainNavigatorProps = {};
 
-export const MainNavigator: React.FC<MainNavigatorProps> = () => {
-  return (
+export const MainNavigator: React.FC<MainNavigatorProps> = () => (
     <VStack style={{ flex: 1 }}>
       <Stack.Navigator
         initialRouteName={RootScreens.WELCOME}
@@ -30,7 +29,10 @@ export const MainNavigator: React.FC<MainNavigatorProps> = () => {
           name={RootScreens.PROFILE}
           component={Profile}
         />
+        <Stack.Screen
+          name={RootScreens.SCAN}
+          component={Home}
+        />
       </Stack.Navigator>
     </VStack>
   );
-};
