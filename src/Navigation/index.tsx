@@ -4,9 +4,9 @@ import { MainNavigator } from "./Main";
 // @refresh reset
 
 const ApplicationNavigator = () => (
-    <NavigationContainer>
-      <MainNavigator />
-    </NavigationContainer>
-  );
+  <NavigationContainer>
+    <MainNavigator />
+  </NavigationContainer>
+);
 
 export { ApplicationNavigator };

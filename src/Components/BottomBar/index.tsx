@@ -77,7 +77,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopWidth: 0.5,
     borderTopColor: Colors.LIGHTER_BORDER,
-    borderTopStyle: 'solid'
+    borderTopStyle: 'solid',
+    zIndex: 2,
+    backgroundColor: Colors.WHITE
   },
   textContainer: {
     alignItems: 'center',
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY,
   },
   textNormal: {
-    color: Colors.TEXT_GRAY,
+    color: Colors.TEXT_SECONDARY,
   },
 });
 

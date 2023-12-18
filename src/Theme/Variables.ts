@@ -14,10 +14,15 @@ export enum Colors {
   WHITE = "#ffffff",
   TEXT = "#212529",
   PRIMARY = "#1FCC79",
+  SECONDARY = "#FF6464",
   SUCCESS = "#28a745",
   ERROR = "#dc3545",
-  TEXT_GRAY = "#9FA5C0",
-  LIGHTER_BORDER = "#E0E0E0"
+  LIGHTER_BORDER = "#E0E0E0",
+  NAVY = "#3E5481",
+  TEXT_SECONDARY = "#9FA5C0",
+  FORM = "#F4F5F7",
+  TEXT_DARK = "#000",
+  TEXT_DESCRIPTION = "#3D3D3D"
 }
 
 export enum NavigationColors {
