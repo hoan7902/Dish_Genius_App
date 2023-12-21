@@ -26,6 +26,17 @@ const persistConfig = {
   whitelist: ["theme"],
 };
 
+AsyncStorage.getAllKeys().then((keyArray) => {
+  AsyncStorage.multiGet(keyArray).then((keyValArray) => {
+    const myStorage: any = {};
+    for (const keyVal of keyValArray) {
+      myStorage[keyVal[0]] = keyVal[1];
+    }
+
+    console.log('CURRENT STORAGE: ', myStorage);
+  });
+});
+
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 /* eslint-disable no-underscore-dangle */

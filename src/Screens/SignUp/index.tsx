@@ -1,18 +1,16 @@
 import React, { memo } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootScreens } from '..';
-import BottomBar from '@/Components/BottomBar';
-import Profile from '@/Components/Profile';
+import SignIn from '@/Components/SignIn';
 
 type HomeScreenProps = {
   navigation: StackNavigationProp<any, RootScreens.HOME>;
 };
 
-const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => (
+const SignUpScreen: React.FC<HomeScreenProps> = ({ navigation }) => (
   <View style={styles.container}>
-    <Profile navigation={navigation} />
-    <BottomBar navigation={navigation} activeIcon='Profile' />
+    <SignIn navigation={navigation} isSignUp />
   </View>
 );
 
@@ -24,4 +22,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(HomeScreen);
+export default memo(SignUpScreen);

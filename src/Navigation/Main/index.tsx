@@ -9,6 +9,9 @@ import { VStack } from "native-base";
 import { getListFood } from "@/api";
 import { useDispatch } from "react-redux";
 import { setListFood } from "@/Store/reducers";
+import SignIn from "@/Screens/SignIn";
+import SignUp from "@/Screens/SignUp";
+import EditProfile from "@/Screens/EditProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,8 +43,20 @@ export const MainNavigator: React.FC = () => {
           component={Profile}
         />
         <Stack.Screen
+          name={RootScreens.EDIT_PROFILE}
+          component={EditProfile}
+        />
+        <Stack.Screen
           name={RootScreens.SCAN}
           component={Home}
+        />
+        <Stack.Screen 
+          name={RootScreens.SIGNIN}
+          component={SignIn}
+        />
+        <Stack.Screen 
+          name={RootScreens.SIGNUP}
+          component={SignUp}
         />
       </Stack.Navigator>
     </VStack>
