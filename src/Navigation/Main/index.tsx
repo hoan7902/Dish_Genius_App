@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootScreens } from "@/Screens";
 import Home from "@/Screens/Home";
+import Scan from "@/Screens/Scan";
+import Scanned from "@/Screens/ScannedDetail";
 import Welcome from "@/Screens/Welcome";
 import Profile from "@/Screens/Profile";
 import { VStack } from "native-base";
@@ -48,7 +50,11 @@ export const MainNavigator: React.FC = () => {
         />
         <Stack.Screen
           name={RootScreens.SCAN}
-          component={Home}
+          component={Scan}
+        />
+        <Stack.Screen
+          name={RootScreens.SCANNEDDETAIL}
+          component={Scanned}
         />
         <Stack.Screen 
           name={RootScreens.SIGNIN}

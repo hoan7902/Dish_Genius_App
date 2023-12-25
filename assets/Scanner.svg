@@ -1,0 +1,13 @@
+<svg width="247" height="238" viewBox="0 0 247 238" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <rect x="8" y="114" width="231" height="4" fill="#fff" />
+  </g>
+  <rect x="8" y="114" width="231" height="4" fill="#fff" />
+  <path
+    stroke="#fff"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="4"
+    d="M163 2h60c8.837 0 16 7.163 16 16v60m-76 158h60c8.837 0 16-7.163 16-16v-60M84 2H24C15.163 2 8 9.163 8 18v60m76 158H24c-8.837 0-16-7.163-16-16v-60"
+  />
+</svg>
