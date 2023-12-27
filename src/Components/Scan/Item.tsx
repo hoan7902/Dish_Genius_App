@@ -31,7 +31,6 @@ const Item = () => {
         duration: 500, // Adjust duration as needed
         useNativeDriver: false,
       }).start();
-      console.log('Tick button released');
     },
   });
 
@@ -60,7 +59,6 @@ const Item = () => {
         duration: 500, // Adjust duration as needed
         useNativeDriver: false,
       }).start();
-      console.log('Tick button released');
     },
   });
 

@@ -40,7 +40,6 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
         const photo = await cameraRef.takePictureAsync();
         setCapturedImage(photo?.uri);
         navigation.navigate(RootScreens.SCANNEDDETAIL);
-        console.log(photo?.uri);
       } catch (error) {
         console.error('Error taking picture:', error);
       }

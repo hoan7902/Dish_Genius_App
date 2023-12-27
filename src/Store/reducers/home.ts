@@ -2,14 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const slice = createSlice({
   name: "home",
-  initialState: { theme: null, darkMode: null, listFood: null },
+  initialState: { theme: null, darkMode: null, listFood: null, listFavouriteIds: null },
   reducers: {
-    setListFood: (state, { payload: listFood }) => {
-      state.listFood = listFood;
-    }
+    setListFood: (state, { payload }) => {
+      state.listFood = payload.listFood;
+    },
+    setListFavouriteIds: (state, { payload }) => {
+      state.listFavouriteIds = payload.listFavouriteIds;
+    },
   },
 });
 
-export const { setListFood } = slice.actions;
+export const { setListFood, setListFavouriteIds } = slice.actions;
 
-export const homeReducers = slice.reducer;
+export const homeReducer = slice.reducer;

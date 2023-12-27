@@ -57,12 +57,55 @@ export const getUserProfile = async () => {
 
 export const updateUserProfile = async (payload: any) => {
   try {
-    console.log('check payload: ', payload);
     const res = await axios.patch('user/edit-profile', payload);
     console.log('check res: ', res);
     return res.data;
   } catch (error) {
     console.error('Error getUserProfile in:', error);
+    throw error;
+  }
+};
+
+export const getFavouriteDishIds = async () => {
+  try {
+    const res = await axios.get('my-favorite-dish-ids');
+    console.log('check res: ', res);
+    return res.data;
+  } catch (error) {
+    console.error('Error getFavouriteDishIds in:', error);
+    throw error;
+  }
+};
+
+export const addFavouriteDishById = async (id: any) => {
+  try {
+    const res = await axios.post(`dish/favorite/${id}`);
+    console.log('check res: ', res);
+    return res.data;
+  } catch (error) {
+    console.error('Error addFavouriteDishById in:', error);
+    throw error;
+  }
+};
+
+export const removeFavouriteDishById = async (id: any) => {
+  try {
+    const res = await axios.delete(`dish/favorite/${id}`);
+    console.log('check res: ', res);
+    return res.data;
+  } catch (error) {
+    console.error('Error removeFavouriteDishById in:', error);
+    throw error;
+  }
+};
+
+export const getDishById = async (id: any) => {
+  try {
+    const res = await axios.get(`dish/${id}`);
+    console.log('check res: ', res);
+    return res.data;
+  } catch (error) {
+    console.error('Error getFavouriteDishIds in:', error);
     throw error;
   }
 };

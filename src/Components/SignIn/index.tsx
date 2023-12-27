@@ -9,6 +9,8 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import BaseModal from '../BaseModal';
 import BaseButton from '../BaseButton';
+import { setUserId } from '@/Store/reducers';
+import { useDispatch } from 'react-redux';
 
 interface SignInProps {
   navigation?: StackNavigationProp<any, any>;
@@ -36,11 +38,16 @@ const SignIn:React.FC<SignInProps> = ({ navigation, isSignUp }) => {
 
   const toggleShowPassword = () => setIsHidePassword(!isHidePassword);
 
+  const dispatch = useDispatch();
+
   const handleSignIn = async () => {
     if (isSignUp) { // Đăng ký
       const res = await signUp(email, password);
       if (!res) setIsShowMessageError(true);
       else setIsShowMessageError(false);
+      await AsyncStorage.setItem('token', res.data.token);
+      await AsyncStorage.setItem('userId', res.data.user.userId);
+      dispatch(setUserId({ userId: res.data.user.userId }));
       setIsModalVisible(true);
     } else { // Đăng nhập
       const res = await signIn(email, password);
@@ -48,6 +55,7 @@ const SignIn:React.FC<SignInProps> = ({ navigation, isSignUp }) => {
       else setIsShowMessageError(false);
       await AsyncStorage.setItem('token', res.data.token);
       await AsyncStorage.setItem('userId', res.data.user.userId);
+      dispatch(setUserId({ userId: res.data.user.userId }));
       navigation?.navigate(RootScreens.HOME);
     }
   };
@@ -117,7 +125,7 @@ const SignIn:React.FC<SignInProps> = ({ navigation, isSignUp }) => {
         {isSignUp && <BaseModal
           isModalVisible={isModalVisible}
           onClose={toggleModal}
-          onPressButton={() => navigation?.navigate(RootScreens.SIGNIN)}
+          onPressButton={() => navigation?.navigate(RootScreens.WELCOME)}
         />}
 
         {isSignUp ? <View style={{ flexDirection: 'row', marginTop: 15, justifyContent: 'center' }}>

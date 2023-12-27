@@ -38,7 +38,6 @@ const Category: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   const handleTypeClick = (index: number) => {
-    console.log('hehe');
     setActiveIndex(index === activeIndex ? null : index);
   };
 

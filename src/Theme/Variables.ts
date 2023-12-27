@@ -22,7 +22,8 @@ export enum Colors {
   TEXT_SECONDARY = "#9FA5C0",
   FORM = "#F4F5F7",
   TEXT_DARK = "#000",
-  TEXT_DESCRIPTION = "#3D3D3D"
+  TEXT_DESCRIPTION = "#3D3D3D",
+  GRAY_INDICATOR = "#D0DBEA"
 }
 
 export enum NavigationColors {

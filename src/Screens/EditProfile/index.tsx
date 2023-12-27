@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootScreens } from '..';
 import BottomBar from '@/Components/BottomBar';
-import Profile from '@/Components/Profile';
 import EditProfile from '@/Components/EditProfile';
 
 type HomeScreenProps = {

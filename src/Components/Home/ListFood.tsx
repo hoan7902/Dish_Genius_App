@@ -1,37 +1,99 @@
 import { useAppSelector } from '@/Hooks/redux';
 import { Colors } from '@/Theme/Variables';
 import { ScrollView, Text } from 'native-base';
-import React, { memo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, Dimensions, StyleSheet } from 'react-native';
-import { TabView, SceneMap, Route, TabBar } from 'react-native-tab-view';
+import { TabView, Route, TabBar } from 'react-native-tab-view';
 import FoodDetails from './FoodDetails';
+import BaseButton from '../BaseButton';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootScreens } from '@/Screens';
+import { getDishById } from '@/api';
 
-const FirstRoute: React.FC = () => {
+interface ListFoodProps {
+  navigation?: StackNavigationProp<any, any>;
+}
+
+interface FirstRouteProps {
+  navigation?: StackNavigationProp<any, any>;
+}
+
+interface SecondRouteProps {
+  navigation?: StackNavigationProp<any, any>;
+}
+
+const FirstRoute: React.FC<FirstRouteProps> = ({ navigation }) => {
   const listFood = useAppSelector(state => state.home.listFood);
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent} style={{ marginBottom: 120 }}>
-      {Object.values(listFood || {})?.map((food: any) => <FoodDetails key={food.id} item={food} />)}
+      {Object.values(listFood || {})?.map((food: any) => <FoodDetails key={food.id} item={food} onPress={() => navigation?.navigate(RootScreens.FOOD_DETAILS, { food })}/>)}
     </ScrollView>
   );
 };
 
-const SecondRoute: React.FC = () => {
-  const listFood = useAppSelector(state => state.home.listFood);
+const SecondRoute: React.FC<SecondRouteProps> = ({ navigation }) => {
+  const userId = useAppSelector(state => state.user.userId);
+  const listFavouriteIds = useAppSelector(state => state.home.listFavouriteIds);
+  const [listFoodFavourite, setListFoodFavourite] = useState([]);
+  const fetchFavouriteFood = useCallback(async () => {
+    try {
+      for (const id of listFavouriteIds) {
+        const res = await getDishById(id);
+        setListFoodFavourite(prevList => {
+          if (!prevList.some(item => item.id === res.id)) {
+            return [...prevList, res];
+          }
+          return prevList; // Nếu id đã tồn tại, không thêm vào mảng
+        });
+        console.log('check res getDishById: ', res);
+      }
+    } catch (error) {
+      console.error('Error fetching favourite food:', error);
+    }
+  }, [listFavouriteIds]);
+
+  useEffect(() => {
+    fetchFavouriteFood();
+  }, [userId, listFavouriteIds]);
+
+  if (!userId) {
+    return <View style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <BaseButton
+        buttonText="Sign in"
+        buttonColor={Colors.PRIMARY}
+        buttonTextColor="white"
+        onPress={() => navigation?.navigate(RootScreens.SIGNIN)}
+        width={250}
+      />
+    </View>;
+  }
+  
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent} style={{ marginBottom: 120 }}>
-      {Object.values(listFood || {})?.map((food: any) => <FoodDetails key={food.id} item={food} />)}
+      {listFoodFavourite?.map((food: any) => 
+        <FoodDetails 
+          key={food.id} 
+          item={food} 
+          onPress={() => navigation?.navigate(RootScreens.FOOD_DETAILS, { food })} 
+        />)}
     </ScrollView>
   );
 };
 
-const renderScene = SceneMap({
-  popular: FirstRoute,
-  favourite: SecondRoute,
-});
+const renderScene = ({ route, navigation }: { route: Route; navigation: StackNavigationProp<any, any>; }) => {
+  switch (route.key) {
+    case 'popular':
+      return <FirstRoute navigation={navigation} />;
+    case 'favourite':
+      return <SecondRoute navigation={navigation} />;
+    default:
+      return null;
+  }
+};
 
 const initialLayout = { width: Dimensions.get('window').width };
 
-const ListFood: React.FC = () => {
+const ListFood: React.FC<ListFoodProps> = ({ navigation }) => {
   const [index, setIndex] = React.useState<number>(0);
   const [routes] = React.useState<Route[]>([
     { key: 'popular', title: 'Popular' },
@@ -65,7 +127,7 @@ const ListFood: React.FC = () => {
     <View style={styles.container}>
       <TabView
         navigationState={{ index, routes }}
-        renderScene={renderScene}
+        renderScene={(props) => renderScene({ ...props, navigation })} // Pass navigation prop here
         onIndexChange={handleIndexChange}
         initialLayout={initialLayout}
         renderTabBar={renderTabBar}

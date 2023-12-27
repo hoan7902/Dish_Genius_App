@@ -8,24 +8,33 @@ import Scanned from "@/Screens/ScannedDetail";
 import Welcome from "@/Screens/Welcome";
 import Profile from "@/Screens/Profile";
 import { VStack } from "native-base";
-import { getListFood } from "@/api";
+import { getFavouriteDishIds, getListFood } from "@/api";
 import { useDispatch } from "react-redux";
-import { setListFood } from "@/Store/reducers";
+import { setListFavouriteIds, setListFood, setUserId } from "@/Store/reducers";
 import SignIn from "@/Screens/SignIn";
 import SignUp from "@/Screens/SignUp";
 import EditProfile from "@/Screens/EditProfile";
+import FoodMoreDetails from "@/Screens/FoodMoreDetails";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAppSelector } from "@/Hooks/redux";
 
 const Stack = createNativeStackNavigator();
 
 export const MainNavigator: React.FC = () => {
   const dispatch = useDispatch();
-  const fetchDishes = async () => {
+  const userId = useAppSelector(state => state.user.userId);
+  const fetchInitialData = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    dispatch(setUserId({ userId }));
     const listFood: any = await getListFood();
-    dispatch(setListFood({ ...listFood }));
+    const resFavouriteIds = await getFavouriteDishIds();
+    dispatch(setListFavouriteIds({ listFavouriteIds: resFavouriteIds.data.ids}));
+    dispatch(setListFood({ listFood }));
   };
   useEffect(() => {
-    fetchDishes();
-  }, []);
+    fetchInitialData();
+  }, [userId]);
+
   return (
     <VStack style={{ flex: 1 }}>
       <Stack.Navigator
@@ -63,6 +72,10 @@ export const MainNavigator: React.FC = () => {
         <Stack.Screen 
           name={RootScreens.SIGNUP}
           component={SignUp}
+        />
+        <Stack.Screen 
+          name={RootScreens.FOOD_DETAILS}
+          component={FoodMoreDetails}
         />
       </Stack.Navigator>
     </VStack>

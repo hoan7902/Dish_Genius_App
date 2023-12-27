@@ -1,11 +1,16 @@
+import { useAppSelector } from '@/Hooks/redux';
 import { RootScreens } from '@/Screens';
 import { Colors } from '@/Theme/Variables';
 import { getUserProfile } from '@/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, HStack, VStack } from 'native-base';
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import SvgUri from 'react-native-svg-uri';
+import BaseButton from '../BaseButton';
+import { setUserId } from '@/Store/reducers';
+import { useDispatch } from 'react-redux';
 
 interface ProfileProps {
   navigation?: StackNavigationProp<any, any>;
@@ -13,7 +18,9 @@ interface ProfileProps {
 }
 
 const Profile:React.FC<ProfileProps> = ({ navigation }) => {
+  const userId = useAppSelector(state => state.user.userId);
   const [userInfo, setUserInfo] = useState();
+  const dispatch = useDispatch();
 
   const fetchUserProfile = useCallback(async () => {
     const res = await getUserProfile();
@@ -23,6 +30,25 @@ const Profile:React.FC<ProfileProps> = ({ navigation }) => {
   useEffect(() => {
     fetchUserProfile();
   }, []);
+
+  const handleLogout = useCallback(async () => {
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('userId');
+    dispatch(setUserId({ userId: null }));
+    navigation?.navigate(RootScreens.HOME);
+  }, []);
+
+  if (!userId) {
+    return <View style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <BaseButton
+        buttonText="Sign in"
+        buttonColor={Colors.PRIMARY}
+        buttonTextColor="white"
+        onPress={() => navigation?.navigate(RootScreens.SIGNIN)}
+        width={250}
+      />
+    </View>;
+  }
 
   return (
     <View style={styles.container}>
@@ -73,10 +99,10 @@ const Profile:React.FC<ProfileProps> = ({ navigation }) => {
             <SvgUri source={require('../../../assets/lock.svg')} />
             <Text style={styles.textDetailInfo}>Change password</Text>
           </HStack>
-          <HStack style={{ alignItems: 'center', gap: 4 }}>
+          <TouchableOpacity style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 10 }} onPress={handleLogout}>
             <SvgUri source={require('../../../assets/logout.svg')} />
             <Text style={styles.textDetailInfo}>Logout</Text>
-          </HStack>
+          </TouchableOpacity>
         </VStack>
       </VStack>
     </View>

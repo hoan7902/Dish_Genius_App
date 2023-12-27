@@ -33,7 +33,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         />
       </VStack>
       <Category />
-      <ListFood />
+      <ListFood navigation={navigation} />
       <BottomBar navigation={navigation} activeIcon='Home' />
     </View>
   );
