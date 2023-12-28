@@ -4,9 +4,10 @@ import { View, Text, TouchableOpacity, ColorValue } from 'react-native';
 interface YourComponentProps {
   text: string;
   color: ColorValue;
+  isSelected: boolean
 }
 
-const YourComponent: React.FC<YourComponentProps> = ({ text, color }) => {
+const CateItem: React.FC<YourComponentProps> = ({ text, color, isSelected }) => {
   const calculateBorderColor = (baseColor: string, factor: number): string => {
     const hex = baseColor.replace('#', '');
     const num = parseInt(hex, 16);
@@ -36,17 +37,18 @@ const YourComponent: React.FC<YourComponentProps> = ({ text, color }) => {
   const textColor = calculateContrastColor(color.toString());
 
   return (
-    <TouchableOpacity style={{width:100, height:120, position:"relative", top:12, left:10}}>
+    <View style={{width:100, height:120, position:"relative", top:12, left:10}}>
       <View
         style={{
           width: 81.53,
-          height: 109,
+          height: 108,
           left: -8,
           top: -12,
           position: 'absolute',
           borderRadius: 50,
           borderWidth: 1,
           borderColor: borderColor,
+          opacity:isSelected?1:0.1
         }}
       />
       <View
@@ -58,6 +60,7 @@ const YourComponent: React.FC<YourComponentProps> = ({ text, color }) => {
             justifyContent: 'center',
             alignItems: 'center',
             marginRight: 10,
+            opacity:isSelected?1:0.1
           }}
         >
         <Text>🍕</Text>
@@ -65,7 +68,6 @@ const YourComponent: React.FC<YourComponentProps> = ({ text, color }) => {
             style={{
               color: textColor,
               fontSize: 12,
-              fontFamily: 'Inter',
               fontWeight: '500',
               letterSpacing: 0.5,
             }}
@@ -73,8 +75,8 @@ const YourComponent: React.FC<YourComponentProps> = ({ text, color }) => {
           {text}
         </Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
-export default YourComponent;
+export default CateItem;

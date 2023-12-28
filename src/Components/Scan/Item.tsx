@@ -12,7 +12,13 @@ const NoTickIcon = () => (
     <SvgUri source={require('../../../assets/NoTick.svg')} />
   </View>
 );
-const Item = () => {
+
+interface ItemProps {
+  name: string,
+  deleteItemFromCategory: () => void;
+}
+
+const Item: React.FC<ItemProps> = ({name, deleteItemFromCategory}) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const tickAnimatedValue = useRef(new Animated.Value(100)).current;
 
@@ -36,7 +42,7 @@ const Item = () => {
 
   const tickWidth = tickAnimatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ["85%", "0%"],
+    outputRange: ["0%", "85%"],
   });
 
   const tickBackgroundColor = tickAnimatedValue.interpolate({
@@ -59,6 +65,7 @@ const Item = () => {
         duration: 500, // Adjust duration as needed
         useNativeDriver: false,
       }).start();
+      deleteItemFromCategory();
     },
   });
 
@@ -89,9 +96,10 @@ const Item = () => {
   return (
     <Animated.View
       style={{
-        width: '100%',
-        maxWidth: 120,
-        height: '100%',
+        marginVertical:2,
+        // width: '100%',
+        minWidth: 105,
+        height: 35,
         paddingLeft: 7,
         paddingRight: 7,
         paddingTop: 4,
@@ -124,7 +132,7 @@ const Item = () => {
           zIndex:100
         }}
       >
-        Egg
+        {name}
       </Text>
       <Animated.View {...panResponder.panHandlers} style={{flex:1, justifyContent:"center", alignItems:"center" , width: 6, height: 6, zIndex:100 }}>
         <NoTickIcon />    
