@@ -10,9 +10,18 @@ interface BaseModalProps {
   isModalVisible?: boolean;
   setIsModalVisible?: React.Dispatch<React.SetStateAction<boolean>>;
   onClose: any,
+  title: string,
+  description: string,
 }
 
-const BaseModal: React.FC<BaseModalProps> = ({ buttonText = "Login", onPressButton, isModalVisible, onClose }) => (
+const BaseModal: React.FC<BaseModalProps> = ({ 
+  buttonText = "Login", 
+  onPressButton, 
+  isModalVisible, 
+  onClose,
+  title,
+  description
+}) => (
   <View style={{ justifyContent: 'center', alignItems: 'center' }}>
     <Modal isOpen={isModalVisible} onClose={onClose}>
       <Modal.Content>
@@ -20,8 +29,8 @@ const BaseModal: React.FC<BaseModalProps> = ({ buttonText = "Login", onPressButt
           <Image
               source={require('../../../assets/Congratulation.png')}
             />
-          <Text style={{ color: Colors.NAVY, fontWeight: 700, fontSize: 22 }}>Register Successfully</Text>
-          <Text style={{ fontSize: 15 }}>Return to the login page to log in</Text>
+          <Text style={{ color: Colors.NAVY, fontWeight: 700, fontSize: 22 }}>{title}</Text>
+          <Text style={{ fontSize: 15 }}>{description}</Text>
           <BaseButton
             buttonText={buttonText}
             buttonColor={Colors.PRIMARY}

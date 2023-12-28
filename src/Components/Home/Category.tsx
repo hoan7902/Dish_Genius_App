@@ -1,7 +1,10 @@
+import { setIsFetchingData, setListFood } from '@/Store/reducers';
 import { Colors } from '@/Theme/Variables';
+import { getListFood } from '@/api';
 import { HStack, Text, VStack } from 'native-base';
 import React, { memo, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 const types = ["All", "Food", "Drink"];
 
@@ -36,9 +39,21 @@ const TypeCategory: React.FC<TypeCategoryProps> = ({ activeIndex, handleTypeClic
 
 const Category: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const dispatch = useDispatch();
 
-  const handleTypeClick = (index: number) => {
+  const handleTypeClick = async (index: number) => {
     setActiveIndex(index === activeIndex ? null : index);
+    console.log('check index: ', index);
+    let query;
+    if (index === 2) {
+      query = "Drink";
+    } else if (index === 1) {
+      query = "Food";
+    }
+    dispatch(setIsFetchingData({ isFetchingData: true }));
+    const listFood: any = await getListFood(query || '');
+    dispatch(setIsFetchingData({ isFetchingData: false }));
+    dispatch(setListFood({ listFood }));
   };
 
   return (

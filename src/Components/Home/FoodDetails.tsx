@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 const FoodDetails = ({ item, onPress }: { item: any, onPress: any }) => {
   const userId = useAppSelector(state => state.user.userId);
   const listFavouriteIds = useAppSelector(state => state.home.listFavouriteIds);
-  const isFavourite = useMemo(() => listFavouriteIds.includes(item.id), [item, listFavouriteIds]);
+  const isFavourite = useMemo(() => listFavouriteIds?.includes(item.id), [item, listFavouriteIds]);
   const [isRed, setIsRed] = useState(isFavourite);
   const dispatch = useDispatch();
   
@@ -31,7 +31,7 @@ const FoodDetails = ({ item, onPress }: { item: any, onPress: any }) => {
     <TouchableOpacity onPress={onPress} style={styles.container}>
       {item.thumbnail_url && (
         <Image
-          source={{ uri: item.thumbnail_url }}
+          source={{ uri: item?.thumbnail_url || '' }}
           style={styles.image}
         />
       )}
@@ -40,7 +40,7 @@ const FoodDetails = ({ item, onPress }: { item: any, onPress: any }) => {
       <View style={styles.subInformation}>
         <HStack style={{ alignItems: 'center', gap: 4 }}>
           <SvgUri source={require('../../../assets/Star.svg')} />
-          <Text>{`Score: ${(item.user_ratings.score * 100).toFixed(2)} / 100`}</Text>
+          <Text>{`Score: ${(item?.user_ratings?.score * 100 || 0).toFixed(2)} / 100`}</Text>
         </HStack>
         <Text style={styles.timeCook}>{`${item.cook_time_minutes || '20'} m`}</Text>
         {userId && 

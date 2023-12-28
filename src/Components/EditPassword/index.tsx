@@ -1,6 +1,6 @@
 import { RootScreens } from '@/Screens';
 import { Colors } from '@/Theme/Variables';
-import { getUserProfile, updateUserProfile } from '@/api';
+import { getUserProfile, updateUserPassword, updateUserProfile } from '@/api';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { VStack } from 'native-base';
 import React, { memo, useCallback, useEffect, useState } from 'react';
@@ -14,52 +14,35 @@ type EditProfileProps = {
 };
 
 const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
-  const [userInfo, setUserInfo] = useState();
-  const [email, setEmail] = useState(userInfo?.email || '');
-  const [phone, setPhone] = useState(userInfo?.phone || '');
-  const [name, setName] = useState(userInfo?.name || '');
-
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isError, setIsError] = useState(false);
 
   const handleUpdateUserProfile = useCallback(async () => {
-    const res = await updateUserProfile({
-      name, phone, email
+    const res = await updateUserPassword({
+      oldPassword, newPassword, confirmPassword
     });
     if (res) {
       setIsModalVisible(true);
       setIsError(false);
     } else {
-      setIsError(true);
+      setIsError(false);
     }
-  }, [email, phone, name]);
+  }, [confirmPassword, newPassword, oldPassword]);
 
-  const handleEmailChange = useCallback((text) => {
-    setEmail(text);
-  }, [email]);
+  const handleConfirmChange = useCallback((text) => {
+    setConfirmPassword(text);
+  }, [confirmPassword]);
 
-  const handleNameChange = useCallback((text) => {
-    setName(text);
-  }, [name]);
+  const handleOldPasswordChange = useCallback((text) => {
+    setOldPassword(text);
+  }, [oldPassword]);
 
-  const handlePhoneChange = useCallback((text) => {
-    setPhone(text);
-  }, [phone]);
-
-  const fetchUserProfile = useCallback(async () => {
-    const res = await getUserProfile();
-    setUserInfo(res.data);
-  }, []);
-
-  useEffect(() => {
-    setEmail(userInfo?.email);
-    setPhone(userInfo?.phone);
-    setName(userInfo?.name);
-  }, [userInfo]);
-
-  useEffect(() => {
-    fetchUserProfile();
-  }, []);
+  const handleNewPasswordChange = useCallback((text) => {
+    setNewPassword(text);
+  }, [newPassword]);
 
   return (
     <View style={styles.container}>
@@ -69,7 +52,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
             source={require('../../../assets/arrow-left.svg')}
           />
         </TouchableOpacity>
-        <Text style={styles.textTitle}>Edit Profile</Text>
+        <Text style={styles.textTitle}>Edit Password</Text>
         <View style={styles.profileLogo}>
           <Image 
             source={require('../../../assets/profile_logo.png')}
@@ -80,7 +63,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
       <VStack style={{ paddingHorizontal: 20, marginTop: 100 }}>
         <VStack style={{ gap: 20 }}>
           <VStack style={{ gap: 10 }}>
-            <Text style={styles.textTitleInfo}>Name: </Text>
+            <Text style={styles.textTitleInfo}>Old password: </Text>
             <TextInput 
               style={{
                 width: '100%',
@@ -91,13 +74,13 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
                 borderColor: '#A9A9A9',
                 paddingLeft: 20,
               }}
-              placeholder="Name"
-              value={name}
-              onChangeText={handleNameChange}
+              placeholder="Old password"
+              value={oldPassword}
+              onChangeText={handleOldPasswordChange}
             />
           </VStack>
           <VStack style={{ gap: 10 }}>
-            <Text style={styles.textTitleInfo}>Email: </Text>
+            <Text style={styles.textTitleInfo}>New password: </Text>
             <TextInput 
               style={{
                 width: '100%',
@@ -108,13 +91,14 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
                 borderColor: '#A9A9A9',
                 paddingLeft: 20,
               }}
-              placeholder="Email"
-              value={email}
-              onChangeText={handleEmailChange}
+              placeholder="New password"
+              value={newPassword}
+              onChangeText={handleNewPasswordChange}
+              secureTextEntry={true}
             />
           </VStack>
           <VStack style={{ gap: 10 }}>
-            <Text style={styles.textTitleInfo}>Phone: </Text>
+            <Text style={styles.textTitleInfo}>Confirm password: </Text>
             <TextInput 
               style={{
                 width: '100%',
@@ -125,12 +109,15 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
                 borderColor: '#A9A9A9',
                 paddingLeft: 20,
               }}
-              placeholder="Phone"
-              value={phone}
-              onChangeText={handlePhoneChange}
+              placeholder="Old password"
+              value={confirmPassword}
+              onChangeText={handleConfirmChange}
+              secureTextEntry={true}
             />
           </VStack>
-
+          {isError && <View style={{ paddingHorizontal: 40 }}>
+            <Text style={{ color: Colors.ERROR }}>Invalid credentials. Please check your email and password and try again.</Text>
+          </View>}
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
             <BaseButton
               buttonText="Update"
@@ -143,15 +130,14 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
           </View>
         </VStack>
       </VStack>
-      {isModalVisible && <BaseModal
+      <BaseModal
         isModalVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         onPressButton={() => navigation?.navigate(RootScreens.PROFILE)}
-        title="Update Success"
-        description="Your profile has been updated,
-        you can see it on your profile"
+        title="Change Success"
+        description="Your password has been changed"
         buttonText="Back to profile"
-      />}
+      />
     </View>
   );
 };

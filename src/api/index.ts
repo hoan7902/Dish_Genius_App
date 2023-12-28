@@ -62,7 +62,19 @@ export const updateUserProfile = async (payload: any) => {
     return res.data;
   } catch (error) {
     console.error('Error getUserProfile in:', error);
-    throw error;
+    return undefined;
+  }
+};
+
+export const updateUserPassword = async (payload: any) => {
+  try {
+    console.log('check payload updateUserPassword: ', payload);
+    const res = await axios.patch('user/change-password', payload);
+    console.log('check res: ', res);
+    return res.data;
+  } catch (error) {
+    console.error('Error updateUserPassword in:', error);
+    return undefined;
   }
 };
 

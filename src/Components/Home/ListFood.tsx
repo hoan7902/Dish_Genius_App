@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/Hooks/redux';
 import { Colors } from '@/Theme/Variables';
-import { ScrollView, Text } from 'native-base';
+import { ScrollView, Spinner, Text } from 'native-base';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, Dimensions, StyleSheet } from 'react-native';
 import { TabView, Route, TabBar } from 'react-native-tab-view';
@@ -24,6 +24,13 @@ interface SecondRouteProps {
 
 const FirstRoute: React.FC<FirstRouteProps> = ({ navigation }) => {
   const listFood = useAppSelector(state => state.home.listFood);
+  const isFetchingData = useAppSelector(state => state.home.isFetchingData);
+  if (Object.values(listFood || {}).length === 0 || !listFood || isFetchingData) {
+    return <View style={{ marginTop: 100 }}>
+      <Spinner color="emerald.500" size="lg"/>
+    </View>;
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent} style={{ marginBottom: 120 }}>
       {Object.values(listFood || {})?.map((food: any) => <FoodDetails key={food.id} item={food} onPress={() => navigation?.navigate(RootScreens.FOOD_DETAILS, { food })}/>)}
@@ -35,6 +42,8 @@ const SecondRoute: React.FC<SecondRouteProps> = ({ navigation }) => {
   const userId = useAppSelector(state => state.user.userId);
   const listFavouriteIds = useAppSelector(state => state.home.listFavouriteIds);
   const [listFoodFavourite, setListFoodFavourite] = useState([]);
+  const isFetchingData = useAppSelector(state => state.home.isFetchingData);
+
   const fetchFavouriteFood = useCallback(async () => {
     try {
       for (const id of listFavouriteIds) {
@@ -45,7 +54,6 @@ const SecondRoute: React.FC<SecondRouteProps> = ({ navigation }) => {
           }
           return prevList; // Nếu id đã tồn tại, không thêm vào mảng
         });
-        console.log('check res getDishById: ', res);
       }
     } catch (error) {
       console.error('Error fetching favourite food:', error);
@@ -65,6 +73,18 @@ const SecondRoute: React.FC<SecondRouteProps> = ({ navigation }) => {
         onPress={() => navigation?.navigate(RootScreens.SIGNIN)}
         width={250}
       />
+    </View>;
+  }
+
+  if (isFetchingData) {
+    return <View style={{ marginTop: 100 }}>
+      <Spinner color="emerald.500" size="lg"/>
+    </View>;
+  }
+
+  if (Object.values(listFoodFavourite || {}).length === 0 || !listFoodFavourite || isFetchingData) {
+    return <View style={{ marginTop: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Text>You don't have any favorite dishes yet.</Text>
     </View>;
   }
   

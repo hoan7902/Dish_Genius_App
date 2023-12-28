@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootScreens } from '..';
@@ -7,6 +7,9 @@ import { Input, VStack } from 'native-base';
 import SvgUri from 'react-native-svg-uri';
 import Category from '@/Components/Home/Category';
 import ListFood from '@/Components/Home/ListFood';
+import { getListFood } from '@/api';
+import { setIsFetchingData, setListFood } from '@/Store/reducers';
+import { useDispatch } from 'react-redux';
 
 type HomeScreenProps = {
   navigation: StackNavigationProp<any, RootScreens.HOME>;
@@ -18,7 +21,25 @@ const SearchIcon = () => <View style={{ marginLeft: 15, height: 56, display: 'fl
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dispatch = useDispatch();
+
+  const handleOnSearch = useCallback((text) => {
+    setSearchQuery(text); // Cập nhật searchQuery
+
+    // Xóa timeout trước đó (nếu có)
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Tạo mới timeout với thời gian chờ là 1000ms (1s)
+    timeoutRef.current = setTimeout(async () => {
+      dispatch(setIsFetchingData({ isFetchingData: true }));
+      const listFood = await getListFood(text);
+      dispatch(setListFood({ listFood }));
+      dispatch(setIsFetchingData({ isFetchingData: false }));
+    }, 800);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -29,7 +50,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           variant="rounded"
           placeholder="Search"
           value={searchQuery}
-          onChangeText={(text) => setSearchQuery(text)} // Update searchQuery state on input change
+          onChangeText={(text) => handleOnSearch(text)} // Update searchQuery state on input change
         />
       </VStack>
       <Category />

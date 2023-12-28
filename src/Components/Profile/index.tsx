@@ -95,10 +95,13 @@ const Profile:React.FC<ProfileProps> = ({ navigation }) => {
       <VStack style={{ paddingHorizontal: 20, marginTop: 30 }}>
         <VStack style={{ gap: 5 }}>
           <Text style={styles.textTitleInfo}>Account</Text>
-          <HStack style={{ alignItems: 'center', gap: 4 }}>
+          <TouchableOpacity 
+            style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 10 }} 
+            onPress={() => navigation?.navigate(RootScreens.EDIT_PASSWORD)}
+          >
             <SvgUri source={require('../../../assets/lock.svg')} />
             <Text style={styles.textDetailInfo}>Change password</Text>
-          </HStack>
+          </TouchableOpacity>
           <TouchableOpacity style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 10 }} onPress={handleLogout}>
             <SvgUri source={require('../../../assets/logout.svg')} />
             <Text style={styles.textDetailInfo}>Logout</Text>

@@ -105,7 +105,7 @@ const SignIn:React.FC<SignInProps> = ({ navigation, isSignUp }) => {
         </TouchableOpacity>
       </View>
       {isShowMessageError && <View style={{ paddingHorizontal: 40 }}>
-        <Text style={{ color: Colors.ERROR }}>Invalid credentials. Please check your email and password and try again.</Text>
+        <Text style={{ color: Colors.ERROR }}>Invalid password. Something went wrong.</Text>
       </View>}
       <View>
         <BaseButton
@@ -125,7 +125,12 @@ const SignIn:React.FC<SignInProps> = ({ navigation, isSignUp }) => {
         {isSignUp && <BaseModal
           isModalVisible={isModalVisible}
           onClose={toggleModal}
-          onPressButton={() => navigation?.navigate(RootScreens.WELCOME)}
+          onPressButton={() => {
+            navigation?.navigate(RootScreens.WELCOME);
+            setIsModalVisible(false);
+          }}
+          title="Register Successfully"
+          description="Return to the login page to log in"
         />}
 
         {isSignUp ? <View style={{ flexDirection: 'row', marginTop: 15, justifyContent: 'center' }}>
