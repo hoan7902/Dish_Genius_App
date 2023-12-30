@@ -43,33 +43,24 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
   const takePicture = async () => {
     if (cameraRef) {
       try {
-        const options = { quality: 1, base64: true,  format: 'jpg' }; // Set base64 option to true
+        const options = { quality: 1, base64: true,  format: 'jpg' };
         const photo = await cameraRef.takePictureAsync(options);
   
-        // Set the captured image base64 data
-        const base64Image = photo.base64;
-        
-        // Set the captured image URI (optional, remove if not needed)
         setCapturedImage(photo?.uri);
-        // Create FormData
         const formData = new FormData();
         const fileUri = photo.uri;
         console.log({fileUri});
-        // const fileName = fileUri.split('/').pop(); // Get the file name from the URI
-        // const fileType = 'image/jpg'; // Adjust the file type if needed
-
-        // // Convert the image to Blob
-        // const fileBlob = await FileSystem.readAsStringAsync(fileUri, {
-        //   encoding: FileSystem.EncodingType.Base64,
-        // });
 
         const response = await fetch(fileUri);
         const blob = await response.blob();
         console.log({blob, fileUri});
+        const filename = fileUri.split('/').pop();
 
+        // Infer the type of the image
+        const match = /\.(\w+)$/.exec(filename || '');
+        const type = match ? `image/${match[1]}` : `image`;
 
-        // formData.append('image', blob, '412418347_1083552213095570_2864901517473978635_n.jpg');
-        formData.append('image', blob);
+        formData.append('image', { uri: fileUri, name: filename, type });
   
         // Send the FormData with base64 image data to the API
         await sendImageToAPI(formData);

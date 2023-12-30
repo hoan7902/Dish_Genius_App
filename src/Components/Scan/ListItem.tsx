@@ -22,7 +22,7 @@ const ListItem: React.FC<ListItemProps> = ({ ingredients, selectedCategory, dele
           {ingredientGroup.category}:
         </Text>
         <HStack space={2} flexWrap={"wrap"} justifyContent="space-between" width={"100%"}>
-          {ingredientGroup.items.map((item, itemIndex) => (
+          {(ingredientGroup.items || []).map((item, itemIndex) => (
             <Item key={itemIndex} name={item}  deleteItemFromCategory={() => deleteItemFromCategory(ingredientGroup.category, item)}/>
             ))}
         </HStack>

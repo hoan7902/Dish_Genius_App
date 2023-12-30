@@ -1,4 +1,8 @@
 import axios from './axiosInstance';
+import {LOG_MEAL_TOKEN, BASE_URL_LOG_MEAL} from '@env';
+
+const logMealToken = LOG_MEAL_TOKEN;
+const baseUrlLogMeal = BASE_URL_LOG_MEAL;
 
 export const getListFood = async (searchQuery: string) => {
   try {
@@ -126,12 +130,30 @@ export const getDishById = async (id: any) => {
 export const getListIngredients = async (formData: any) => {
   try {
     console.log("getListIngredients");
-    const res = await axios.post('detect-ingredients', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Cần set Content-Type là multipart/form-data khi gửi hình ảnh
+    console.log('check formData: ', formData);
+    const response = await axios.post(
+      baseUrlLogMeal,
+      formData,
+      {
+        params: {
+          language: 'eng',
+        },
+        headers: {
+          Authorization: `Bearer ${logMealToken}`,
+          'Content-Type': 'multipart/form-data',
+        },
       },
-    });
-    // console.log('check res: ', res);
+    );
+    console.log('check response: ', response.data);
+    // const ingredients: Set<string> = new Set();
+    // response.data['segmentation_results'].map((segment) => {
+    //   segment['recognition_results'].map((obj) => {
+    //     if (obj['foodType']['id'] === 2) {
+    //       ingredients.add(obj['name']);
+    //     }
+    //   });
+    // });
+    // console.log('check ingredients: ', ingredients);
     return res.data;
   } catch (error) {
     console.error('Error getListIngredients in:', error);

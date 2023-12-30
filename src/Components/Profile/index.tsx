@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, HStack, VStack } from 'native-base';
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import BaseButton from '../BaseButton';
 import { setUserId } from '@/Store/reducers';
@@ -51,7 +51,7 @@ const Profile:React.FC<ProfileProps> = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.banner}>
         <Text style={styles.textTitle}>Profile</Text>
         <View style={styles.profileLogo}>
@@ -108,7 +108,7 @@ const Profile:React.FC<ProfileProps> = ({ navigation }) => {
           </TouchableOpacity>
         </VStack>
       </VStack>
-    </View>
+    </ScrollView>
   );
 };
 
