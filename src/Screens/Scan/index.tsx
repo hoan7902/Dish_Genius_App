@@ -6,7 +6,7 @@ import { Camera, CameraType } from 'expo-camera';
 import SvgUri from 'react-native-svg-uri';
 import { getListIngredients } from '@/api';
 import * as FileSystem from 'expo-file-system';
-import { setQuery, setScanIngredients } from '@/Store/reducers';
+import { setListScanIngredientsAndTypes, setQuery, setScanIngredients } from '@/Store/reducers';
 import { useDispatch } from 'react-redux';
 
 type ScanScreenProps = {
@@ -43,7 +43,7 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
   const takePicture = async () => {
     if (cameraRef) {
       try {
-        const options = { quality: 1, base64: true,  format: 'jpg' };
+        const options = { quality: 0.3, base64: true,  format: 'jpg' };
         const photo = await cameraRef.takePictureAsync(options);
   
         setCapturedImage(photo?.uri);
@@ -76,23 +76,22 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
 
   const sendImageToAPI = async (formData: FormData) => {
     try {
-      const data = await getListIngredients(formData);
-      console.log({data});
+      const ingredientsAndTypes = await getListIngredients(formData);
+      console.debug({ingredientsAndTypes});
 
       // dispatch(setScanIngredients({listScanIngredients:data.ingredients}));
-
+      // Create a function to extract ingredients from an object:
+      function extractIngredients (object:any) {
+        return object.ingredient || [];
+      }
       //mock
-      const ingredients = [
-        "watermelon",
-        "melon",
-        "papaya",
-        "grapefruit",
-        "strawberry",
-        "broad beans"
-      ];
+      const ingredients = Object.values(ingredientsAndTypes).reduce((acc:any, cur) => acc.concat(extractIngredients(cur)), []);
+      console.debug({ingredients});
       const query = ingredients.reduce((result, item)=>result+" "+item);
       dispatch(setScanIngredients({listScanIngredients:ingredients}));
       dispatch(setQuery({query}));
+      dispatch(setListScanIngredientsAndTypes({ingredientsAndTypes}));
+  
     } catch (error) {
       console.error('Error sending image to API:', error);
     }

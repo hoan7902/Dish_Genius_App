@@ -139,22 +139,43 @@ export const getListIngredients = async (formData: any) => {
           language: 'eng',
         },
         headers: {
-          Authorization: `Bearer ${logMealToken}`,
+          Authorization: `Bearer ${"b54fb85538b1962fe54e548accad163fae527851"}`,
           'Content-Type': 'multipart/form-data',
         },
       },
     );
-    console.log('check response: ', response.data);
-    // const ingredients: Set<string> = new Set();
-    // response.data['segmentation_results'].map((segment) => {
-    //   segment['recognition_results'].map((obj) => {
-    //     if (obj['foodType']['id'] === 2) {
-    //       ingredients.add(obj['name']);
-    //     }
-    //   });
-    // });
+    const ingredientsAndTypes = [];
+
+    for (const segmentationResult of response.data.segmentation_results) {
+      const ingredient = segmentationResult.recognition_results[0].subclasses.map((item:any)=>item.name);
+      ingredient.push(segmentationResult.recognition_results[0].name);
+      const ingredientAndType = {
+        ingredient: ingredient,
+        type: segmentationResult.recognition_results[0].foodType.name,
+      };
+    
+      ingredientsAndTypes.push(ingredientAndType);
+    }
+    
+    console.debug({ingredientsAndTypes});
+
+    const mergedIngredients = {};
+
+    for (const { ingredient, type } of ingredientsAndTypes) {
+      if (!mergedIngredients[type]) {
+        mergedIngredients[type] = { ingredient: [] };
+      }
+    
+      mergedIngredients[type].ingredient.push(...ingredient); // Combine ingredients
+    
+      // Remove duplicates using Set
+      mergedIngredients[type].ingredient = [...new Set(mergedIngredients[type].ingredient)];
+    }
+
+    console.debug({mergedIngredients});
+    
     // console.log('check ingredients: ', ingredients);
-    return res.data;
+    return mergedIngredients;
   } catch (error) {
     console.error('Error getListIngredients in:', error);
     throw error;

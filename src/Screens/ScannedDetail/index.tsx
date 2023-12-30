@@ -8,6 +8,8 @@ import ListItem from '@/Components/Scan/ListItem';
 import { ScrollView, Text } from 'native-base';
 import { Colors } from '@/Theme/Variables';
 import { useAppSelector } from '@/Hooks/redux';
+import { useDispatch } from 'react-redux';
+import { deleteScanIngredient } from '@/Store/reducers';
 
 type ScannedDetailScreenProps = {
   navigation: StackNavigationProp<any, RootScreens.SCANNEDDETAIL>;
@@ -15,16 +17,25 @@ type ScannedDetailScreenProps = {
 
 
 const ScannedDetailScreen: React.FC<ScannedDetailScreenProps> = ({ navigation }) => {
-  const categoryData = ['Protein', 'Oil', 'Vegetables'];
+  const listScanIngredients = useAppSelector(state=>state.scan.ingredientsAndTypes) || ['Protein', 'Oil', 'Vegetables'];
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const dispatch = useDispatch();
+  // const categoryData = ['Protein', 'Oil', 'Vegetables'];
+  const categoryData = Object.keys(listScanIngredients);
 
-  const listScanIngredients = useAppSelector(state=>state.scan.listScanIngredients);
+  // Transform ingredient data:
+  const transformedList = categoryData.map(category => ({
+    category,
+    items: [...new Set(listScanIngredients[category].ingredient.filter(item => item))] // Remove duplicates and empty strings
+  }));
+  const [ingredientsList, setIngredientsList] = useState(transformedList);
+  // const listScanIngredients = useAppSelector(state=>state.scan.listScanIngredients);
 
-  const [ingredientsList, setIngredientsList] = useState([
-    { category: 'Protein', items: ['Chicken', 'Beef', 'Tofu'] },
-    { category: 'Oil', items: ['Olive Oil', 'Coconut Oil', 'Vegetable Oil'] },
-    { category: 'Vegetables', items: listScanIngredients },
-  ]);
+  // const [ingredientsList, setIngredientsList] = useState([
+  //   { category: 'Protein', items: ['Chicken', 'Beef', 'Tofu'] },
+  //   { category: 'Oil', items: ['Olive Oil', 'Coconut Oil', 'Vegetable Oil'] },
+  //   { category: 'Vegetables', items: listScanIngredients },
+  // ]);
 
   const handleCategorySelect = useCallback((category: string) => {
     console.log({category});
@@ -32,6 +43,7 @@ const ScannedDetailScreen: React.FC<ScannedDetailScreenProps> = ({ navigation })
   }, []);
 
   const deleteItemFromCategory = useCallback((categoryName:string, itemName:string) => {
+    dispatch(deleteScanIngredient({item:itemName}));
     const categoryIndex = ingredientsList.findIndex(cat => cat.category === categoryName);
 
     if (categoryIndex !== -1) {
