@@ -4,6 +4,7 @@ export enum RootScreens {
   PROFILE = "Profile",
   SCAN = "Scan",
   SCANNEDDETAIL = "Scanned",
+  SCAN_RESULT = "ScanResult",
   SIGNIN = "SignIn",
   SIGNUP = "SignUp",
   EDIT_PROFILE = "EditProfile",

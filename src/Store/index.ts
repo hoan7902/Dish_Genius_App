@@ -12,13 +12,14 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import { homeReducer, themeReducers, userReducer } from "./reducers";
+import { homeReducer, themeReducers, userReducer, scanReducer } from "./reducers";
 
 const reducers = combineReducers({
   api: API.reducer,
   theme: themeReducers,
   home: homeReducer,
   user: userReducer,
+  scan: scanReducer
 });
 
 const persistConfig = {

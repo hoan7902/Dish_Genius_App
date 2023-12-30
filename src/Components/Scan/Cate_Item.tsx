@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ColorValue } from 'react-native';
 
-interface YourComponentProps {
+interface CateItemProps {
   text: string;
   color: ColorValue;
   isSelected: boolean
 }
 
-const CateItem: React.FC<YourComponentProps> = ({ text, color, isSelected }) => {
+const CateItem: React.FC<CateItemProps> = ({ text, color, isSelected }) => {
   const calculateBorderColor = (baseColor: string, factor: number): string => {
     const hex = baseColor.replace('#', '');
     const num = parseInt(hex, 16);

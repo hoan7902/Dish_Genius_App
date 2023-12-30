@@ -7,6 +7,7 @@ import Category from '@/Components/Scan/Category';
 import ListItem from '@/Components/Scan/ListItem';
 import { ScrollView, Text } from 'native-base';
 import { Colors } from '@/Theme/Variables';
+import { useAppSelector } from '@/Hooks/redux';
 
 type ScannedDetailScreenProps = {
   navigation: StackNavigationProp<any, RootScreens.SCANNEDDETAIL>;
@@ -17,10 +18,12 @@ const ScannedDetailScreen: React.FC<ScannedDetailScreenProps> = ({ navigation })
   const categoryData = ['Protein', 'Oil', 'Vegetables'];
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
+  const listScanIngredients = useAppSelector(state=>state.scan.listScanIngredients);
+
   const [ingredientsList, setIngredientsList] = useState([
     { category: 'Protein', items: ['Chicken', 'Beef', 'Tofu'] },
     { category: 'Oil', items: ['Olive Oil', 'Coconut Oil', 'Vegetable Oil'] },
-    { category: 'Vegetables', items: ['Broccoli', 'Carrots', 'Spinach'] },
+    { category: 'Vegetables', items: listScanIngredients },
   ]);
 
   const handleCategorySelect = useCallback((category: string) => {
@@ -70,7 +73,7 @@ const ScannedDetailScreen: React.FC<ScannedDetailScreenProps> = ({ navigation })
           <SvgUri source={require("../../../assets/Scan.svg")} />
           <Text style={styles.text}>Scan</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={()=>{}}>
+        <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate(RootScreens.SCAN_RESULT);}}>
           <SvgUri source={require("../../../assets/FindIcon.svg")} />
           <Text style={styles.text__NAVY}>Find</Text>
         </TouchableOpacity>
@@ -83,7 +86,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 40,
     position:"relative"
   },
   scroll_container:{
@@ -91,12 +93,14 @@ const styles = StyleSheet.create({
     height:"100%",
   },
   inner_container:{
+    marginTop: 70,
     flex:1,
     alignItems: 'center',
-    marginTop: 60
   },
   iconBack: {
-    position: 'absolute',
+    position: 'relative',
+    width:50,
+    marginTop:10,
     top: 0,
     left: 10,
     zIndex: 1,

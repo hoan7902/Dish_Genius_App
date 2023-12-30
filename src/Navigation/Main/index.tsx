@@ -5,6 +5,7 @@ import { RootScreens } from "@/Screens";
 import Home from "@/Screens/Home";
 import Scan from "@/Screens/Scan";
 import Scanned from "@/Screens/ScannedDetail";
+import ScanResult from "@/Screens/ScanResult";
 import Welcome from "@/Screens/Welcome";
 import Profile from "@/Screens/Profile";
 import { VStack } from "native-base";
@@ -71,6 +72,10 @@ export const MainNavigator: React.FC = () => {
         <Stack.Screen
           name={RootScreens.SCANNEDDETAIL}
           component={Scanned}
+        />
+        <Stack.Screen
+          name={RootScreens.SCAN_RESULT}
+          component={ScanResult}
         />
         <Stack.Screen 
           name={RootScreens.SIGNIN}

@@ -45,10 +45,9 @@ const styles = StyleSheet.create({
   text: {
     color: '#9FA5C0',
     fontSize: 12,
-    fontFamily: 'Inter',
     fontWeight: '500',
     letterSpacing: 0.50,
-    flexWrap: 'nowrap', // Replaced 'wordWrap' with 'flexWrap' for React Native
+    flexWrap: 'nowrap', // Replaced 'flexWrap' with 'flexWrap' for React Native
   }
 });
 

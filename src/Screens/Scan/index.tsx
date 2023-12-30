@@ -4,6 +4,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootScreens } from '..';
 import { Camera } from 'expo-camera';
 import SvgUri from 'react-native-svg-uri';
+import { getListIngredients } from '@/api';
+import * as FileSystem from 'expo-file-system';
+import { setQuery, setScanIngredients } from '@/Store/reducers';
+import { useDispatch } from 'react-redux';
 
 type ScanScreenProps = {
   navigation: StackNavigationProp<any, RootScreens.SCAN>;
@@ -19,6 +23,7 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [cameraRef, setCameraRef] = useState<Camera | null>(null);
   const [capturedImage, setCapturedImage] = useState<string|null>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -34,44 +39,82 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+  
   const takePicture = async () => {
     if (cameraRef) {
       try {
-        const photo = await cameraRef.takePictureAsync();
+        const options = { quality: 1, base64: true }; // Set base64 option to true
+        const photo = await cameraRef.takePictureAsync(options);
+  
+        // Set the captured image base64 data
+        const base64Image = photo.base64;
+        
+        // Set the captured image URI (optional, remove if not needed)
         setCapturedImage(photo?.uri);
+        // Create FormData
+        const formData = new FormData();
+        const fileUri = photo.uri;
+        const fileName = fileUri.split('/').pop(); // Get the file name from the URI
+        const fileType = 'image/jpeg'; // Adjust the file type if needed
+
+        // Convert the image to Blob
+        const fileBlob = await FileSystem.readAsStringAsync(fileUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+
+        formData.append('image', {
+          uri: fileUri,
+          name: fileName,
+          type: fileType,
+          data: fileBlob, // Assign the image data (Base64 encoded) to the FormData
+        });
+  
+        // Send the FormData with base64 image data to the API
+        await sendImageToAPI(formData);
+        
+        // Navigate to the 'SCANNEDDETAIL' screen
         navigation.navigate(RootScreens.SCANNEDDETAIL);
       } catch (error) {
         console.error('Error taking picture:', error);
       }
     }
   };
+  
 
-  // const sendImageToAPI = async () => {
-  //   if (capturedImage) {
-  //     try {
-  //       const formData = new FormData();
-  //       formData.append('image', {
-  //         uri: capturedImage,
-  //         name: 'photo.jpg',
-  //         type: 'image/jpeg',
-  //       });
+  const sendImageToAPI = async (formData: FormData) => {
+    try {
+      const data = await getListIngredients(formData);
 
-  //       const response = await fetch('YOUR_API_ENDPOINT', {
-  //         method: 'POST',
-  //         body: formData,
-  //         headers: {
-  //           'Content-Type': 'multipart/form-data',
-  //         },
-  //       });
+      dispatch(setScanIngredients({listScanIngredients:data.ingredients}));
 
-  //       // Xử lý response từ API (nếu cần)
-  //       const data = await response.json();
-  //       console.log('API Response:', data);
-  //     } catch (error) {
-  //       console.error('Error sending image to API:', error);
-  //     }
-  //   }
-  // };
+      //mock
+      const ingredients = [
+        "watermelon",
+        "melon",
+        "papaya",
+        "grapefruit",
+        "strawberry",
+        "broad beans"
+      ];
+      const query = ingredients.reduce((result, item)=>result+" "+item);
+      dispatch(setScanIngredients({listScanIngredients:ingredients}));
+      dispatch(setQuery({query}));
+    } catch (error) {
+      console.error('Error sending image to API:', error);
+    }
+  };
+
+  const convertImageToBase64 = async (imageUri: string) => {
+    try {
+      const base64Image = await FileSystem.readAsStringAsync(imageUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      return base64Image;
+    } catch (error) {
+      console.error('Error converting image to base64:', error);
+      throw error;
+    }
+  };
 
   return (
     <View style={styles.container}>
