@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootScreens } from '..';
 import SvgUri from 'react-native-svg-uri';
@@ -53,7 +53,7 @@ const ScannedDetailScreen: React.FC<ScannedDetailScreenProps> = ({ navigation })
     }
   }, [ingredientsList]);
   return(
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scroll_container}>
         <TouchableOpacity style={styles.iconBack} onPress={() => navigation.navigate(RootScreens.HOME)}>
           <SvgUri source={require('../../../assets/arrow-left.svg')} />
@@ -69,7 +69,7 @@ const ScannedDetailScreen: React.FC<ScannedDetailScreenProps> = ({ navigation })
      
       </ScrollView>
       <View style={styles.scanButtonContainer}>
-        <TouchableOpacity style={styles.btn} onPress={()=>{}}>
+        <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate(RootScreens.SCAN);}}>
           <SvgUri source={require("../../../assets/Scan.svg")} />
           <Text style={styles.text}>Scan</Text>
         </TouchableOpacity>
@@ -79,14 +79,15 @@ const ScannedDetailScreen: React.FC<ScannedDetailScreenProps> = ({ navigation })
         </TouchableOpacity>
       </View>
    
-    </View>
+    </SafeAreaView>
   );};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    position:"relative"
+    position:"relative",
+    marginTop:10,
   },
   scroll_container:{
     width:"100%",

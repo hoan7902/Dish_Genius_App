@@ -35,7 +35,7 @@ const ScanResultScreen: React.FC<ScanResultScreenProps> = ({ navigation }) => {
   
     try {
       let listFood = await Promise.all(
-        listScanIngredients.map(async (item: any) => {const result = await getListFood(item); return result;})
+        listScanIngredients?.map(async (item: any) => {const result = await getListFood(item); return result;})
       );
   
       // Flatting the listFood array

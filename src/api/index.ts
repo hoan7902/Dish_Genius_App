@@ -125,7 +125,7 @@ export const getDishById = async (id: any) => {
 
 export const getListIngredients = async (formData: any) => {
   try {
-    console.log(formData);
+    console.log("getListIngredients");
     const res = await axios.post('detect-ingredients', formData, {
       headers: {
         'Content-Type': 'multipart/form-data', // Cần set Content-Type là multipart/form-data khi gửi hình ảnh

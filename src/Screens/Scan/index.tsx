@@ -2,7 +2,7 @@ import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootScreens } from '..';
-import { Camera } from 'expo-camera';
+import { Camera, CameraType } from 'expo-camera';
 import SvgUri from 'react-native-svg-uri';
 import { getListIngredients } from '@/api';
 import * as FileSystem from 'expo-file-system';
@@ -43,7 +43,7 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
   const takePicture = async () => {
     if (cameraRef) {
       try {
-        const options = { quality: 1, base64: true }; // Set base64 option to true
+        const options = { quality: 1, base64: true,  format: 'jpg' }; // Set base64 option to true
         const photo = await cameraRef.takePictureAsync(options);
   
         // Set the captured image base64 data
@@ -54,20 +54,22 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
         // Create FormData
         const formData = new FormData();
         const fileUri = photo.uri;
-        const fileName = fileUri.split('/').pop(); // Get the file name from the URI
-        const fileType = 'image/jpeg'; // Adjust the file type if needed
+        console.log({fileUri});
+        // const fileName = fileUri.split('/').pop(); // Get the file name from the URI
+        // const fileType = 'image/jpg'; // Adjust the file type if needed
 
-        // Convert the image to Blob
-        const fileBlob = await FileSystem.readAsStringAsync(fileUri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
+        // // Convert the image to Blob
+        // const fileBlob = await FileSystem.readAsStringAsync(fileUri, {
+        //   encoding: FileSystem.EncodingType.Base64,
+        // });
 
-        formData.append('image', {
-          uri: fileUri,
-          name: fileName,
-          type: fileType,
-          data: fileBlob, // Assign the image data (Base64 encoded) to the FormData
-        });
+        const response = await fetch(fileUri);
+        const blob = await response.blob();
+        console.log({blob, fileUri});
+
+
+        // formData.append('image', blob, '412418347_1083552213095570_2864901517473978635_n.jpg');
+        formData.append('image', blob);
   
         // Send the FormData with base64 image data to the API
         await sendImageToAPI(formData);
@@ -84,8 +86,9 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
   const sendImageToAPI = async (formData: FormData) => {
     try {
       const data = await getListIngredients(formData);
+      console.log({data});
 
-      dispatch(setScanIngredients({listScanIngredients:data.ingredients}));
+      // dispatch(setScanIngredients({listScanIngredients:data.ingredients}));
 
       //mock
       const ingredients = [
@@ -120,11 +123,12 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
     <View style={styles.container}>
       <Camera
         style={styles.camera}
-        type={Camera.Constants.Type.back}
+        type={CameraType.back}
         ref={(ref) => setCameraRef(ref)}
       >
         <TouchableOpacity style={styles.iconBack} onPress={() => navigation.navigate(RootScreens.HOME)}>
           <SvgUri source={require('../../../assets/arrow-left.svg')} />
+          
         </TouchableOpacity>
         <View style={styles.cameraContent}>
           <ScanIcon />
