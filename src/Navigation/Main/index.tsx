@@ -32,8 +32,10 @@ export const MainNavigator: React.FC = () => {
     const listFood: any = await getListFood();
     dispatch(setIsFetchingData({ isFetchingData: false }));
     dispatch(setListFood({ listFood }));
-    const resFavouriteIds = await getFavouriteDishIds();
-    dispatch(setListFavouriteIds({ listFavouriteIds: resFavouriteIds.data.ids}));
+    if (userId) {
+      const resFavouriteIds = await getFavouriteDishIds();
+      dispatch(setListFavouriteIds({ listFavouriteIds: resFavouriteIds.data.ids}));
+    }
   };
   useEffect(() => {
     fetchInitialData();

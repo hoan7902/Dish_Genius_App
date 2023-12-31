@@ -16,14 +16,16 @@ const FoodDetails = ({ item, onPress }: { item: any, onPress: any }) => {
   const dispatch = useDispatch();
   
   const handleAddToFavourite = useCallback(async () => {
-    setIsRed(!isRed);
-    if (isFavourite) {
-      await removeFavouriteDishById(item?.id);
-    } else {
-      await addFavouriteDishById(item?.id);
+    if (userId) {
+      setIsRed(!isRed);
+      if (isFavourite) {
+        await removeFavouriteDishById(item?.id);
+      } else {
+        await addFavouriteDishById(item?.id);
+      }
+      const resFavouriteIds = await getFavouriteDishIds();
+      dispatch(setListFavouriteIds({ listFavouriteIds: resFavouriteIds.data.ids}));
     }
-    const resFavouriteIds = await getFavouriteDishIds();
-    dispatch(setListFavouriteIds({ listFavouriteIds: resFavouriteIds.data.ids}));
   }, [userId]);
 
 

@@ -122,7 +122,7 @@ export const getDishById = async (id: any) => {
     // console.log('check res: ', res);
     return res.data;
   } catch (error) {
-    console.error('Error getFavouriteDishIds in:', error);
+    console.error('Error getDishById in:', error);
     throw error;
   }
 };
