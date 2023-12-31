@@ -127,10 +127,18 @@ export const getDishById = async (id: any) => {
   }
 };
 
-export const getListIngredients = async (formData: any) => {
+export const getKeyLogMeal = async () => {
   try {
-    console.log("getListIngredients");
-    console.log('check formData: ', formData);
+    const res = await axios.get('detect-info');
+    return res.data.data.LOG_MEAL_TOKEN;
+  } catch (error) {
+    console.error('Error getDishById in:', error);
+    throw error;
+  }
+};
+
+export const getListIngredients = async (formData: any, keyLogMeal: string) => {
+  try {
     const response = await axios.post(
       baseUrlLogMeal,
       formData,
@@ -139,7 +147,7 @@ export const getListIngredients = async (formData: any) => {
           language: 'eng',
         },
         headers: {
-          Authorization: `Bearer ${logMealToken}`,
+          Authorization: `Bearer ${keyLogMeal}`,
           'Content-Type': 'multipart/form-data',
         },
       },

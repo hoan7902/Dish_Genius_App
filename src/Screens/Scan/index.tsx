@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootScreens } from '..';
 import { Camera, CameraType } from 'expo-camera';
 import SvgUri from 'react-native-svg-uri';
-import { getListIngredients } from '@/api';
+import { getKeyLogMeal, getListIngredients } from '@/api';
 import * as FileSystem from 'expo-file-system';
 import { setListScanIngredientsAndTypes, setQuery, setScanIngredients } from '@/Store/reducers';
 import { useDispatch } from 'react-redux';
@@ -76,7 +76,8 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ navigation }) => {
 
   const sendImageToAPI = async (formData: FormData) => {
     try {
-      const ingredientsAndTypes = await getListIngredients(formData);
+      const keyLogMeal = await getKeyLogMeal();
+      const ingredientsAndTypes = await getListIngredients(formData, keyLogMeal);
       console.debug({ingredientsAndTypes});
 
       // dispatch(setScanIngredients({listScanIngredients:data.ingredients}));
