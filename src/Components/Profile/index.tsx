@@ -4,9 +4,9 @@ import { Colors } from '@/Theme/Variables';
 import { getUserProfile } from '@/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Button, HStack, VStack } from 'native-base';
+import { Button, HStack, ScrollView, VStack } from 'native-base';
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import SvgUri from 'react-native-svg-uri';
 import BaseButton from '../BaseButton';
 import { setUserId } from '@/Store/reducers';
@@ -51,76 +51,86 @@ const Profile:React.FC<ProfileProps> = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.banner}>
-        <Text style={styles.textTitle}>Profile</Text>
-        <View style={styles.profileLogo}>
-          <Image 
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.banner}>
+          <Text style={styles.textTitle}>Profile</Text>
+          <View style={styles.profileLogo}>
+            <Image 
             source={require('../../../assets/profile_logo.png')}
           />
-          <Button onPress={() => navigation?.navigate(RootScreens.EDIT_PROFILE)} style={styles.buttonEdit}>Edit Profile</Button>
+            <Button onPress={() => navigation?.navigate(RootScreens.EDIT_PROFILE)} style={styles.buttonEdit}>Edit Profile</Button>
+          </View>
         </View>
-      </View>
-      {/* Profile */}
-      <VStack style={{ paddingHorizontal: 20, marginTop: 100 }}>
-        <VStack style={{ gap: 5 }}>
-          <Text style={styles.textTitleInfo}>Information</Text>
-          <HStack style={{ alignItems: 'center' }}>
-            <Text style={styles.textTitleInfo}>Email: </Text>
-            <Text style={styles.textDetailInfo}>{userInfo?.email}</Text>
-          </HStack>
-          <HStack style={{ alignItems: 'center' }}>
-            <Text style={styles.textTitleInfo}>Name: </Text>
-            <Text style={styles.textDetailInfo}>{userInfo?.name || '???'}</Text>
-          </HStack>
-          <HStack style={{ alignItems: 'center' }}>
-            <Text style={styles.textTitleInfo}>Phone: </Text>
-            <Text style={styles.textDetailInfo}>{userInfo?.phone || '???'}</Text>
-          </HStack>
+        {/* Profile */}
+        <VStack style={{ paddingHorizontal: 20, marginTop: 120 }}>
+          <VStack style={{ gap: 5 }}>
+            <Text style={styles.textTitleInfo}>Information</Text>
+            <HStack style={{ alignItems: 'center' }}>
+              <Text style={styles.textTitleInfo}>Email: </Text>
+              <Text style={styles.textDetailInfo}>{userInfo?.email}</Text>
+            </HStack>
+            <HStack style={{ alignItems: 'center' }}>
+              <Text style={styles.textTitleInfo}>Name: </Text>
+              <Text style={styles.textDetailInfo}>{userInfo?.name || '???'}</Text>
+            </HStack>
+            <HStack style={{ alignItems: 'center' }}>
+              <Text style={styles.textTitleInfo}>Phone: </Text>
+              <Text style={styles.textDetailInfo}>{userInfo?.phone || '???'}</Text>
+            </HStack>
+          </VStack>
         </VStack>
-      </VStack>
   
-      {/* Content */}
-      <VStack style={{ paddingHorizontal: 20, marginTop: 30 }}>
-        <VStack style={{ gap: 5 }}>
-          <Text style={styles.textTitleInfo}>Content</Text>
-          <HStack style={{ alignItems: 'center', gap: 4 }}>
-            <SvgUri source={require('../../../assets/heart.svg')} />
-            <Text style={styles.textDetailInfo}>Favourite Food</Text>
-          </HStack>
+        {/* Content */}
+        <VStack style={{ paddingHorizontal: 20, marginTop: 30 }}>
+          <VStack style={{ gap: 5 }}>
+            <Text style={styles.textTitleInfo}>Content</Text>
+            <HStack style={{ alignItems: 'center', gap: 4 }}>
+              <SvgUri source={require('../../../assets/heart.svg')} />
+              <Text style={styles.textDetailInfo}>Favourite Food</Text>
+            </HStack>
+          </VStack>
         </VStack>
-      </VStack>
   
-      {/* Account */}
-      <VStack style={{ paddingHorizontal: 20, marginTop: 30 }}>
-        <VStack style={{ gap: 5 }}>
-          <Text style={styles.textTitleInfo}>Account</Text>
-          <TouchableOpacity 
+        {/* Account */}
+        <VStack style={{ paddingHorizontal: 20, marginTop: 30, marginBottom:30 }}>
+          <VStack style={{ gap: 5 }}>
+            <Text style={styles.textTitleInfo}>Account</Text>
+            <TouchableOpacity 
             style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 10 }} 
             onPress={() => navigation?.navigate(RootScreens.EDIT_PASSWORD)}
           >
-            <SvgUri source={require('../../../assets/lock.svg')} />
-            <Text style={styles.textDetailInfo}>Change password</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 10 }} onPress={handleLogout}>
-            <SvgUri source={require('../../../assets/logout.svg')} />
-            <Text style={styles.textDetailInfo}>Logout</Text>
-          </TouchableOpacity>
+              <SvgUri source={require('../../../assets/lock.svg')} />
+              <Text style={styles.textDetailInfo}>Change password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 10 }} onPress={handleLogout}>
+              <SvgUri source={require('../../../assets/logout.svg')} />
+              <Text style={styles.textDetailInfo}>Logout</Text>
+            </TouchableOpacity>
+          </VStack>
         </VStack>
-      </VStack>
-    </ScrollView>
+      </ScrollView>
+    </View>
+  
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: '100%',
     height: '100%',
     position: 'relative',
-    backgroundColor: 'white',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 25
+    backgroundColor: Colors.PRIMARY,
+    marginBottom:120,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: Colors.WHITE,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    position: 'relative',
+    paddingBottom:50,
   },
   banner: {
     height: 188,

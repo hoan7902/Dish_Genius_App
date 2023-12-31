@@ -139,7 +139,7 @@ export const getListIngredients = async (formData: any) => {
           language: 'eng',
         },
         headers: {
-          Authorization: `Bearer ${"b54fb85538b1962fe54e548accad163fae527851"}`,
+          Authorization: `Bearer ${logMealToken}`,
           'Content-Type': 'multipart/form-data',
         },
       },

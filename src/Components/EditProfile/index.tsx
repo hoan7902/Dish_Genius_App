@@ -2,7 +2,7 @@ import { RootScreens } from '@/Screens';
 import { Colors } from '@/Theme/Variables';
 import { getUserProfile, updateUserProfile } from '@/api';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { VStack } from 'native-base';
+import { ScrollView, VStack } from 'native-base';
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
 import SvgUri from 'react-native-svg-uri';
@@ -63,25 +63,26 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.banner}>
-        <TouchableOpacity style={styles.iconBack} onPress={() => navigation.navigate(RootScreens.PROFILE)}>
-          <SvgUri 
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.banner}>
+          <TouchableOpacity style={styles.iconBack} onPress={() => navigation.navigate(RootScreens.PROFILE)}>
+            <SvgUri 
             source={require('../../../assets/arrow-left.svg')}
           />
-        </TouchableOpacity>
-        <Text style={styles.textTitle}>Edit Profile</Text>
-        <View style={styles.profileLogo}>
-          <Image 
+          </TouchableOpacity>
+          <Text style={styles.textTitle}>Edit Profile</Text>
+          <View style={styles.profileLogo}>
+            <Image 
             source={require('../../../assets/profile_logo.png')}
           />
+          </View>
         </View>
-      </View>
-      {/* Profile */}
-      <VStack style={{ paddingHorizontal: 20, marginTop: 100 }}>
-        <VStack style={{ gap: 20 }}>
-          <VStack style={{ gap: 10 }}>
-            <Text style={styles.textTitleInfo}>Name: </Text>
-            <TextInput 
+        {/* Profile */}
+        <VStack style={{ paddingHorizontal: 20, marginTop: 100 }}>
+          <VStack style={{ gap: 20 }}>
+            <VStack style={{ gap: 10 }}>
+              <Text style={styles.textTitleInfo}>Name: </Text>
+              <TextInput 
               style={{
                 width: '100%',
                 height: 56,
@@ -95,10 +96,10 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
               value={name}
               onChangeText={handleNameChange}
             />
-          </VStack>
-          <VStack style={{ gap: 10 }}>
-            <Text style={styles.textTitleInfo}>Email: </Text>
-            <TextInput 
+            </VStack>
+            <VStack style={{ gap: 10 }}>
+              <Text style={styles.textTitleInfo}>Email: </Text>
+              <TextInput 
               style={{
                 width: '100%',
                 height: 56,
@@ -112,10 +113,10 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
               value={email}
               onChangeText={handleEmailChange}
             />
-          </VStack>
-          <VStack style={{ gap: 10 }}>
-            <Text style={styles.textTitleInfo}>Phone: </Text>
-            <TextInput 
+            </VStack>
+            <VStack style={{ gap: 10 }}>
+              <Text style={styles.textTitleInfo}>Phone: </Text>
+              <TextInput 
               style={{
                 width: '100%',
                 height: 56,
@@ -129,10 +130,10 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
               value={phone}
               onChangeText={handlePhoneChange}
             />
-          </VStack>
+            </VStack>
 
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
-            <BaseButton
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginBottom:40}}>
+              <BaseButton
               buttonText="Update"
               buttonColor={Colors.PRIMARY}
               buttonTextColor="white"
@@ -140,10 +141,10 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
               width={250}
               marginTop={0}
             />
-          </View>
+            </View>
+          </VStack>
         </VStack>
-      </VStack>
-      {isModalVisible && <BaseModal
+        {isModalVisible && <BaseModal
         isModalVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         onPressButton={() => navigation?.navigate(RootScreens.PROFILE)}
@@ -152,6 +153,8 @@ const EditProfile: React.FC<EditProfileProps> = ({ navigation }) => {
         you can see it on your profile"
         buttonText="Back to profile"
       />}
+      </ScrollView>
+
     </View>
   );
 };
@@ -164,7 +167,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     display: 'flex',
     flexDirection: 'column',
-    gap: 25
+    gap: 25,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: Colors.WHITE,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    // marginTop: -100,
+    marginBottom:100,
+    position: 'relative',
   },
   banner: {
     height: 188,
