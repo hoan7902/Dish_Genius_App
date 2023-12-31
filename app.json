@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Expo Redux Template",
-    "slug": "expo-redux-template",
+    "name": "Dish Genius",
+    "slug": "dish-genius",
     "version": "1.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Onboarding03.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/Onboarding03.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Onboarding03.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.hpcc.expo_redux_template"

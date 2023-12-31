@@ -14,11 +14,27 @@
       "distribution": "internal",
       "ios": {
         "resourceClass": "m-medium"
+      },
+      "android": {
+        "resourceClass": "m-medium",
+        "buildType": "apk"
+      },
+      "env": {
+        "BASE_URL": "https://dishgeniusserver.onrender.com/api/",
+        "BASE_URL_LOG_MEAL": "https://api.logmeal.es/v2/image/segmentation/complete/v1.0"
       }
     },
     "production": {
       "ios": {
         "resourceClass": "m-medium"
+      },
+      "android": {
+        "resourceClass": "m-medium",
+        "buildType": "apk"
+      },
+      "env": {
+        "BASE_URL": "https://dishgeniusserver.onrender.com/api/",
+        "BASE_URL_LOG_MEAL": "https://api.logmeal.es/v2/image/segmentation/complete/v1.0"
       }
     }
   },
